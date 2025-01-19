@@ -1,118 +1,83 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+    <SafeAreaView style={styles.appContainer}>
+      <View style={styles.headingContainer}>
+        <Text style = {styles.heading}>Tic Tac Toe</Text>
+      </View>
+      <View style={styles.turnContainer}>
+        <Text style={styles.turnText}></Text>
+      </View>
+      <View style={styles.grid}>
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Pressable style={styles.button}><Text style={styles.buttonTxt} >Reset</Text></Pressable>
+      </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  appContainer:{
+    flex:1,
+    backgroundColor:'#E0DFD5',
+    
+    
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  headingContainer:{
+    margin:15,
+    flexDirection:'column',
+    alignItems:'center',
+    
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+  heading:{
+    fontSize:40,
+    fontWeight:'600'
 
-export default App;
+  },
+  turnContainer:{
+    alignSelf:'center',
+    height:100,
+    width: 300,
+    borderRadius:30,
+    backgroundColor: '#E8E9EB',
+    borderColor: '#F09D51',
+    borderWidth: 5,
+    marginBottom:40,
+    marginTop:20,
+    elevation:20
+    
+  },
+  grid:{
+    alignSelf:'center',
+    height:380,
+    width: 380,
+    borderRadius:10,
+    backgroundColor: '#E8E9EB',
+    borderWidth:15,
+    elevation:20
+  },
+  buttonContainer:{
+    margin:50,
+    alignSelf:'center',
+    flexDirection:'column',
+    alignItems:'center'
+  },
+  button:{
+    height: 50,
+    width:130,
+    borderRadius:30,
+    backgroundColor: '#313638',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+
+  },
+  buttonTxt:{
+    fontSize: 24,
+    color:'white'
+  }
+})

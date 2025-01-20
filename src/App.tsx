@@ -57,31 +57,36 @@ export default function App() {
    * @param {number} index - Index of the box pressed
    */
   const play = (index) => {
-    // Only allow the move if the box is empty and the game is not over
-    if (!grid[index] && !gameOver) {
-      const newGrid = [...grid]; // Copy the current grid
-      const symbol = playerTurn ? "o" : "x"; // Determine the symbol for the current player
-      newGrid[index] = symbol; // Update the grid with the player's symbol
-      setGrid(newGrid); // Set the updated grid
-
-      // Update the moves and check for a winner
+    if (!grid[index] && !gameOver) { // Only allow moves if the box is empty and game is not over
+      const newGrid = [...grid];
+      const symbol = playerTurn ? "o" : "x";
+      newGrid[index] = symbol;
+      setGrid(newGrid);
+  
       if (playerTurn) {
-        const updatedMoves = [...gameofO, index + 1]; // Add the move to "O"'s moves
+        const updatedMoves = [...gameofO, index + 1];
         setGameofO(updatedMoves);
         if (!checkWinner(updatedMoves.sort((a, b) => a - b).join(""))) {
-          setTurnText("X's Turn"); // Switch to "X"'s turn if no winner
-          setPlayerTurn(false); // Update player turn
+          setTurnText("X's Turn");
+          setPlayerTurn(false);
         }
       } else {
-        const updatedMoves = [...gameofX, index + 1]; // Add the move to "X"'s moves
+        const updatedMoves = [...gameofX, index + 1];
         setGameofX(updatedMoves);
         if (!checkWinner(updatedMoves.sort((a, b) => a - b).join(""))) {
-          setTurnText("O's Turn"); // Switch to "O"'s turn if no winner
-          setPlayerTurn(true); // Update player turn
+          setTurnText("O's Turn");
+          setPlayerTurn(true);
         }
+      }
+  
+      // Check for a draw after the move
+      if (newGrid.every((cell) => cell !== "") && !gameOver) {
+        setTurnText("It's a Draw!");
+        setGameOver(true); // Stop further moves
       }
     }
   };
+  
 
   /**
    * Function to reset the game
@@ -94,6 +99,12 @@ export default function App() {
     setGameofX([]); // Clear "X"'s moves
     setGameOver(false); // Reset game over state
   };
+
+  const draw = () => {
+    if (grid[index] && gameOver){
+      setTurnText('Draw');
+    }
+  }
 
   return (
     <SafeAreaView style={styles.appContainer}>

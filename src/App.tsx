@@ -27,6 +27,10 @@ export default function App() {
   // State to track if the game is over
   const [gameOver, setGameOver] = useState(false);
 
+  const [bestOf3ofO,setBestOf3ofO] = useState(0);
+
+  const [bestOf3ofX,setBestOf3ofX] = useState(0);
+
   /**
    * Function to check if a player has won
    * @param {Array} playerMoves - Array of moves played by a player
@@ -40,8 +44,20 @@ export default function App() {
     for (let combo of winnerCombo) {
       // Check if all characters in the combo are in the player's moves
       if (combo.split("").every((char) => playerMoves.includes(char))) {
+
         // Update the turn text to display the winner
-        setTurnText(`Player ${playerTurn ? "O" : "X"} Wins!`);
+        if(playerTurn){
+          
+          setBestOf3ofO((bestOf3ofO) < 3 ? (bestOf3ofO)+ 1 : 1);
+          setTurnText('Player O wins');
+        }
+        else if(!playerTurn){
+          setBestOf3ofX((bestOf3ofX) < 3 ? (bestOf3ofX)+ 1 : 1);
+          setTurnText('Player X wins');
+        }
+        
+        
+        
 
         // Set the game over state to true
         setGameOver(true);
@@ -98,12 +114,17 @@ export default function App() {
     setGameofO([]); // Clear "O"'s moves
     setGameofX([]); // Clear "X"'s moves
     setGameOver(false); // Reset game over state
+    
   };
 
   const draw = () => {
     if (grid[index] && gameOver){
       setTurnText('Draw');
     }
+  }
+
+  const bestOf3 = () => {
+
   }
 
   return (
@@ -140,7 +161,23 @@ export default function App() {
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={reset}>
           <Text style={styles.buttonTxt}>Reset</Text>
+          
         </Pressable>
+        <Pressable style={[styles.button , { backgroundColor: '#F09D51' }]} onPress={reset}>
+          
+          <Text style={[styles.buttonTxt, { backgroundColor: '#F09D51' }]}>Best of 3</Text>
+        </Pressable>
+      </View>
+      <View style={styles.bestOf3}>
+        <View style={styles.bestOf3ofO}>
+          <Text style={styles.bestOf3ofOtext}>{bestOf3ofO}</Text>
+
+        </View>
+        <View style={styles.bestOf3ofX}>
+        <Text style={styles.bestOf3ofXtext}>{bestOf3ofX}</Text>
+
+        </View>
+
       </View>
     </SafeAreaView>
   );
@@ -188,9 +225,11 @@ const styles = StyleSheet.create({
     elevation: 20,
   },
   buttonContainer: {
-    margin: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 30,
+    
     alignSelf: "center",
-    flexDirection: "column",
     alignItems: "center",
   },
   button: {
@@ -200,6 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#313638",
     alignItems: "center",
     justifyContent: "center",
+    marginRight:15
   },
   boxes: {
     width: 117,
@@ -217,4 +257,32 @@ const styles = StyleSheet.create({
     fontSize: 90,
     fontWeight: 600,
   },
+  bestOf3:{
+    flex:1,
+    alignSelf: 'center',
+    flexDirection: 'row'
+
+  },
+  bestOf3ofO:{
+    margin: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+
+  },
+  bestOf3ofOtext:{
+    fontSize: 40
+
+  },
+  bestOf3ofX:{
+    margin: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+
+  },
+  bestOf3ofXtext:{
+    fontSize: 40
+
+  },
+
+
 });

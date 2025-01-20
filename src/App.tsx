@@ -81,7 +81,7 @@ export default function App() {
               onPress={() => play(item.index)}
               disabled={item.value !== "" || gameOver} // Disable presses if the game is over
             >
-              <Text>{item.value}</Text>
+              <Text style={styles.value}>{item.value}</Text>
             </Pressable>
           )}
         />
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   boxes: {
-    width: 100,
-    height: 100,
+    width: 117,
+    height: 117,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
@@ -161,4 +161,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "white",
   },
+  value: {
+    fontSize: 90,
+    fontWeight: 600,
+    
+  }
 });

@@ -9,83 +9,123 @@ import {
 } from "react-native";
 
 export default function App() {
+  // State to track which player's turn it is (true for "O", false for "X")
   const [playerTurn, setPlayerTurn] = useState(true);
-  const [grid, setGrid] = useState(Array(9).fill(""));
-  const [turnText, setTurnText] = useState("O's Turn");
-  const [gameofO, setGameofO] = useState([]);
-  const [gameofX, setGameofX] = useState([]);
-  const [gameOver, setGameOver] = useState(false); // Add a new state to track if the game is over
 
+  // State for the grid that holds the values for each box (empty by default)
+  const [grid, setGrid] = useState(Array(9).fill(""));
+
+  // State for displaying whose turn it is
+  const [turnText, setTurnText] = useState("O's Turn");
+
+  // State to track the moves of player "O"
+  const [gameofO, setGameofO] = useState([]);
+
+  // State to track the moves of player "X"
+  const [gameofX, setGameofX] = useState([]);
+
+  // State to track if the game is over
+  const [gameOver, setGameOver] = useState(false);
+
+  /**
+   * Function to check if a player has won
+   * @param {Array} playerMoves - Array of moves played by a player
+   * @returns {boolean} - Returns true if a winning combination is found, otherwise false
+   */
   const checkWinner = (playerMoves) => {
+    // Array of all possible winning combinations
     const winnerCombo = ["123", "159", "147", "456", "789", "258", "679", "357"];
+
+    // Loop through each winning combination
     for (let combo of winnerCombo) {
+      // Check if all characters in the combo are in the player's moves
       if (combo.split("").every((char) => playerMoves.includes(char))) {
+        // Update the turn text to display the winner
         setTurnText(`Player ${playerTurn ? "O" : "X"} Wins!`);
-        setGameOver(true); // Mark the game as over
-        return true; // Indicate a winner was found
+
+        // Set the game over state to true
+        setGameOver(true);
+        return true; // A winner is found
       }
     }
-    return false; // No winner yet
+
+    return false; // No winner found
   };
 
+  /**
+   * Function to handle the game logic when a box is pressed
+   * @param {number} index - Index of the box pressed
+   */
   const play = (index) => {
-    if (!grid[index] && !gameOver) { // Prevent moves if the game is over
-      const newGrid = [...grid];
-      const symbol = playerTurn ? "o" : "x";
-      newGrid[index] = symbol;
-      setGrid(newGrid);
+    // Only allow the move if the box is empty and the game is not over
+    if (!grid[index] && !gameOver) {
+      const newGrid = [...grid]; // Copy the current grid
+      const symbol = playerTurn ? "o" : "x"; // Determine the symbol for the current player
+      newGrid[index] = symbol; // Update the grid with the player's symbol
+      setGrid(newGrid); // Set the updated grid
 
+      // Update the moves and check for a winner
       if (playerTurn) {
-        const updatedMoves = [...gameofO, index + 1];
+        const updatedMoves = [...gameofO, index + 1]; // Add the move to "O"'s moves
         setGameofO(updatedMoves);
         if (!checkWinner(updatedMoves.sort((a, b) => a - b).join(""))) {
-          setTurnText("X's Turn");
-          setPlayerTurn(false);
+          setTurnText("X's Turn"); // Switch to "X"'s turn if no winner
+          setPlayerTurn(false); // Update player turn
         }
       } else {
-        const updatedMoves = [...gameofX, index + 1];
+        const updatedMoves = [...gameofX, index + 1]; // Add the move to "X"'s moves
         setGameofX(updatedMoves);
         if (!checkWinner(updatedMoves.sort((a, b) => a - b).join(""))) {
-          setTurnText("O's Turn");
-          setPlayerTurn(true);
+          setTurnText("O's Turn"); // Switch to "O"'s turn if no winner
+          setPlayerTurn(true); // Update player turn
         }
       }
     }
   };
 
+  /**
+   * Function to reset the game
+   */
   const reset = () => {
-    setGrid(Array(9).fill(""));
-    setPlayerTurn(true);
-    setTurnText("O's Turn");
-    setGameofO([]);
-    setGameofX([]);
-    setGameOver(false); // Reset the game state
+    setGrid(Array(9).fill("")); // Clear the grid
+    setPlayerTurn(true); // Reset to "O"'s turn
+    setTurnText("O's Turn"); // Reset turn text
+    setGameofO([]); // Clear "O"'s moves
+    setGameofX([]); // Clear "X"'s moves
+    setGameOver(false); // Reset game over state
   };
 
   return (
     <SafeAreaView style={styles.appContainer}>
+      {/* Game Heading */}
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Tic Tac Toe</Text>
       </View>
+
+      {/* Display whose turn it is */}
       <View style={styles.turnContainer}>
         <Text style={styles.turnText}>{turnText}</Text>
       </View>
+
+      {/* Grid for the Tic Tac Toe game */}
       <View style={styles.grid}>
         <FlatList
           data={grid.map((value, index) => ({ value, index }))}
-          numColumns={3}
-          keyExtractor={(item) => item.index.toString()}
+          numColumns={3} // Set grid to 3x3
+          keyExtractor={(item) => item.index.toString()} // Use index as key
           renderItem={({ item }) => (
             <Pressable
               style={styles.boxes}
-              onPress={() => play(item.index)}
-              disabled={item.value !== "" || gameOver} // Disable presses if the game is over
+              onPress={() => play(item.index)} // Call play function on press
+              disabled={item.value !== "" || gameOver} // Disable if box is filled or game is over
             >
               <Text style={styles.value}>{item.value}</Text>
             </Pressable>
           )}
         />
       </View>
+
+      {/* Reset button */}
       <View style={styles.buttonContainer}>
         <Pressable style={styles.button} onPress={reset}>
           <Text style={styles.buttonTxt}>Reset</Text>
@@ -96,6 +136,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  // App container styles
   appContainer: {
     flex: 1,
     backgroundColor: "#E0DFD5",
@@ -164,6 +205,5 @@ const styles = StyleSheet.create({
   value: {
     fontSize: 90,
     fontWeight: 600,
-    
-  }
+  },
 });

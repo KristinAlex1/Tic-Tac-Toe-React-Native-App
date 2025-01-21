@@ -31,6 +31,8 @@ export default function App() {
 
   const [bestOf3ofX,setBestOf3ofX] = useState(0);
 
+  const [isHidden,setIsHidden] = useState(false);
+
   /**
    * Function to check if a player has won
    * @param {Array} playerMoves - Array of moves played by a player
@@ -124,6 +126,15 @@ export default function App() {
   }
 
   const bestOf3 = () => {
+    if(isHidden){
+      setIsHidden(false);
+      setBestOf3ofO(0);
+      setBestOf3ofX(0);
+    }
+    else{
+      setIsHidden(true);
+    }
+    
 
   }
 
@@ -163,22 +174,24 @@ export default function App() {
           <Text style={styles.buttonTxt}>Reset</Text>
           
         </Pressable>
-        <Pressable style={[styles.button , { backgroundColor: '#F09D51' }]} onPress={reset}>
+        <Pressable style={[styles.button , { backgroundColor: '#F09D51' }]} onPress={bestOf3}>
           
-          <Text style={[styles.buttonTxt, { backgroundColor: '#F09D51' }]}>Best of 3</Text>
+        <Text style={[styles.buttonTxt, { backgroundColor: '#F09D51' }]}>Best of 3</Text>
         </Pressable>
       </View>
-      <View style={styles.bestOf3}>
+      {!isHidden &&  <View style={styles.bestOf3} >
         <View style={styles.bestOf3ofO}>
+          <Text style={styles.bestOf3ofOheading}>O`s Score</Text>
           <Text style={styles.bestOf3ofOtext}>{bestOf3ofO}</Text>
 
         </View>
         <View style={styles.bestOf3ofX}>
-        <Text style={styles.bestOf3ofXtext}>{bestOf3ofX}</Text>
+          <Text style={styles.bestOf3ofXheading}>X`s Score</Text>
+          <Text style={styles.bestOf3ofXtext}>{bestOf3ofX}</Text>
 
         </View>
-
-      </View>
+      </View>}
+        
     </SafeAreaView>
   );
 }
@@ -197,6 +210,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 40,
     fontWeight: "600",
+    elevation: 10
   },
   turnContainer: {
     alignSelf: "center",
@@ -221,7 +235,7 @@ const styles = StyleSheet.create({
     width: 380,
     borderRadius: 10,
     backgroundColor: "#E8E9EB",
-    borderWidth: 15,
+    borderWidth: 5,
     elevation: 20,
   },
   buttonContainer: {
@@ -239,11 +253,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#313638",
     alignItems: "center",
     justifyContent: "center",
-    marginRight:15
+    marginRight:15,
+    elevation: 10
   },
   boxes: {
-    width: 117,
-    height: 117,
+    width: 124,
+    height: 124,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
@@ -252,10 +267,11 @@ const styles = StyleSheet.create({
   buttonTxt: {
     fontSize: 24,
     color: "white",
+    
   },
   value: {
-    fontSize: 90,
-    fontWeight: 600,
+    fontSize: 95,
+    fontWeight: 400,
   },
   bestOf3:{
     flex:1,
@@ -266,7 +282,8 @@ const styles = StyleSheet.create({
   bestOf3ofO:{
     margin: 30,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    
 
   },
   bestOf3ofOtext:{
@@ -283,6 +300,24 @@ const styles = StyleSheet.create({
     fontSize: 40
 
   },
+  bestOf3ofOheading:{
+    fontSize: 32,
+    fontWeight: 600,
+    backgroundColor: "#E8E9EB",
+    width: 140,
+    borderRadius: 20,
+    
+
+
+  },
+  bestOf3ofXheading:{
+    fontSize: 32,
+    fontWeight: 600,
+    backgroundColor: "#E8E9EB",
+    width: 140,
+    borderRadius: 20,
+
+  }
 
 
 });
